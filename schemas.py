@@ -13,7 +13,7 @@ class LivroCreate(LivroBase):
 
 
 # Define os dados retornados pela API
-class LivroResponse(BaseModel):
+class LivroResponse(LivroBase):
     id: int
 
     class Config:
