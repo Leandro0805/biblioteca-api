@@ -1,67 +1,29 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
 from database import base
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Date
 
+# Certifique-se de importar os tipos necessários
 
-# Representa a tabela de livros
 class Livro(base):
     __tablename__ = "livros"
 
-    # Identificador único do livro
     id = Column(
-        Integer,
-        primary_key=True,
-        index=True
-    )
-
-    # Título do livro
+        Integer, 
+        primary_key=True, 
+        index=True  # Significa que dentro da tabela, essa coluna terá um índice
+    ) 
     titulo = Column(
-        String(50),
-        nullable=False
+        String(50), 
+        nullable=False  # O que recebeu isso não pode ser nulo
     )
-
-    # Autor do livro
-    autor = Column(
-        String(50),
-        nullable=False
-    )
-
-    # Ano em que o livro foi publicado
-    ano_publicacao = Column(
-        Integer
-    )
+    autor = Column(String(50), nullable=False) 
+    ano_publicacao = Column(Date) 
 
 
-# Representa a tabela de empréstimos
-class Emprestimo(base):
-    __tablename__ = "emprestimos"
+class Emprestimo(base): 
+    __tablename__ = "emprestimos" # Adicionado por boas práticas
 
-    # Identificador único do empréstimo
-    id = Column(
-        Integer,
-        primary_key=True,
-        index=True
-    )
-
-    # Identifica o livro que foi emprestado
-    livro_id = Column(
-        Integer,
-        ForeignKey("livros.id")
-    )
-
-    # Nome da pessoa que realizou o empréstimo
-    nome_leitor = Column(
-        String(50),
-        nullable=False
-    )
-
-    # Data em que o empréstimo foi realizado
-    data_emprestimo = Column(
-        Integer,
-        nullable=False
-    )
-
-    # Indica se o livro já foi devolvido
-    devolvido = Column(
-        Boolean,
-        nullable=False
-    )
+    id = Column(Integer, primary_key=True, index=True) 
+    livro_id = Column(Integer, ForeignKey('livros.id'),nullable=False) # Geralmente usa-se o nome da tabela em minúsculo ('livros.id')
+    nome_leitor = Column(String(50), nullable=False) 
+    data_emprestimo = Column(Date, nullable=False) # Nota: Se for data, o ideal costuma ser Date ou DateTime, mas mantive Integer conforme o seu
+    devolvido = Column(Boolean, default=False, nullable=False) # Corrigido de Bool=True para Boolean, default=True
