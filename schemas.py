@@ -1,42 +1,57 @@
+
 from pydantic import BaseModel
+from datetime import date
+from typing import Literal
 
 
-# Define os dados básicos de um livro
+# Campos básicos utilizados na criação e resposta de um livro.
 class LivroBase(BaseModel):
     titulo: str
     autor: str
 
 
-# Define os dados necessários para criar um livro
+# Schema utilizado para cadastrar um novo livro.
 class LivroCreate(LivroBase):
     ano_publicacao: int
 
 
-# Define os dados retornados pela API
+# Schema utilizado nas respostas da API.
 class LivroResponse(LivroBase):
     id: int
+    ano_publicacao: int
+    status: str
 
     class Config:
-        # Permite criar o schema a partir dos atributos do objeto
+        # Permite criar o schema a partir de objetos do SQLAlchemy.
         from_attributes = True
 
 
-# Define os dados básicos de um empréstimo
+# Define os valores permitidos para o status de um livro.
+class LivroStatusUpdate(BaseModel):
+    status: Literal[
+        "disponivel",
+        "emprestado",
+        "danificado",
+        "perdido"
+    ]
+
+
+# Campos básicos utilizados nos empréstimos.
 class BaseEmprestimo(BaseModel):
     nome_leitor: str
     devolvido: bool
 
 
-# Define os dados necessários para criar um empréstimo
+# Schema utilizado para criar um novo empréstimo.
 class CreateEmprestimo(BaseEmprestimo):
-    data_emprestimo: int
+    data_emprestimo: date
     livro_id: int
 
 
-# Define os dados retornados pela API
+# Schema utilizado nas respostas relacionadas aos empréstimos.
 class ResponseEmprestimo(BaseEmprestimo):
     livro_id: int
 
     class Config:
-        # Permite criar o schema a partir dos atributos do objeto
+        # Permite criar o schema a partir de objetos do SQLAlchemy.
         from_attributes = True
